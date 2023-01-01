@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.demo.springsecurity.entity.Employee;
@@ -51,6 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Employee registerEmployee(SignupModel signup) {
+		
+//		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		if(employeeRepository.findByEmail(signup.getEmail()) != null)
 		{
 			throw new CustomException("already exist "+signup.getEmail(), ErrorCode.RESOURCE_ALREADY_EXISTS);
@@ -61,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee employee = new Employee();
 			
 			roles.add(roleRepository.findByName("user_read"));
-			
+			roles.add(roleRepository.findByName("user_write"));
 			employee = mapper.map(signup, Employee.class);
 			
 			employee.setPassword(passwordEncoder.encode(signup.getPassword()));
