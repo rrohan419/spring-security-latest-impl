@@ -19,7 +19,7 @@ public class TestController {
 		return "test admin";
 	}
 	@GetMapping("/super")
-	@PreAuthorize("hasRole('user_super')")
+	@PreAuthorize("hasRole('user_write')")
 	public String superAdmin() {
 		return "super admin login success";
 		
